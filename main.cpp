@@ -10,6 +10,8 @@ int main() {
 	env.place_piece('R', 0);
 	env.print_board();
 
-	system("pause");
+	cout << "Press Enter To Exit...";
+	cin.get();
+
 	return 0;
 }
