@@ -13,6 +13,7 @@ public:
 	~Environment();
 	int print_board();
 	int place_piece(char p, int c);
+	int has_won(char color);
 private:
 	int rows = 0;
 	int cols = 0;
@@ -20,4 +21,5 @@ private:
 	std::vector<std::vector<char>> board;
 };
 
+int test_wins();
 #endif

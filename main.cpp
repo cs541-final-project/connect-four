@@ -6,9 +6,10 @@ using namespace std;
 int main() {
 	Environment env = Environment();
 	env.print_board();
-	cout << "======\n";
-	env.place_piece('R', 0);
+	cout << "\n=============\n\n";
 	env.print_board();
+
+	test_wins();
 
 	cout << "Press Enter To Exit...";
 	cin.get();
