@@ -21,5 +21,5 @@ private:
 	std::vector<std::vector<char>> board;
 };
 
-int test_wins();
+int test_wins();  // Tests the has_won() method in Environment class.
 #endif

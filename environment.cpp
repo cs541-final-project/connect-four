@@ -103,7 +103,7 @@ int Environment::has_won(char color) {
 	return EXIT_FAILURE;
 }
 
-
+// Tests has_won() method.
 int test_wins() {
 	Environment env = Environment();
 
