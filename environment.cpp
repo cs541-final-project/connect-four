@@ -28,7 +28,7 @@ int Environment::print_board() {
 // p indicates "color" of piece, c indicates column of placement.
 // TODO: Implement penalty upon returning EXIT_FAILURE;
 int Environment::place_piece(char p, int c) {
-	if (toupper(p) != 'R' && toupper(p) != 'Y') {
+	if (toupper(p) != 'R' && toupper(p) != 'B') {
 		std::cout << "Invalid placement. Piece does not exist.\n";
 		exit(EXIT_FAILURE);
 	}
