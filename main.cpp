@@ -16,6 +16,7 @@ int main() {
 	env.print_board();
 	cout << "\n=============\n\n";
 	
+	cout << "Minimax vs. Random\n";
 	// Minimax agent versus random agent.
 	while (!agent.check_win(env) && env.has_won('B') != 1) {
 		agent.minimax(env, 0, true, MIN, MAX, 'R');
@@ -30,6 +31,19 @@ int main() {
 	else if (env.has_won('B') == 1)
 		cout << "\nBLACK WINS!\n\n";
 
+	env.print_board();
+
+	cout << "\nMinimax vs. Minimax\n";
+	// Minimax agent versus other Minimax agent.
+	while (!agent.check_win(env) && !oppAgent.check_win(env)) {
+		agent.minimax(env, 0, true, MIN, MAX, 'R');
+		oppAgent.minimax(env, 0, false, MIN, MAX, 'B');
+	}
+
+	if (agent.check_win(env))
+		cout << "\nRED WINS!\n\n";
+	else if (env.has_won('B') == 1)
+		cout << "\nBLACK WINS!\n\n";
 	env.print_board();
 
 	cout << "Press Enter To Exit...";
