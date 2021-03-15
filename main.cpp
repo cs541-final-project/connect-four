@@ -17,7 +17,7 @@ int main() {
 	cout << "\n=============\n\n";
 	
 	// Minimax agent versus random agent.
-	while (!agent.check_win(env) && !oppAgent.check_win(env)) {
+	while (!agent.check_win(env) && env.has_won('B') != 1) {
 		agent.minimax(env, 0, true, MIN, MAX, 'R');
 		int index = rand() % 7;
 		while (env.place_piece('B', index) == EXIT_FAILURE) {
