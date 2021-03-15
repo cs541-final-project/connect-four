@@ -58,7 +58,7 @@ int Environment::place_piece(char p, int c) {
 
 	// Checks if the column is full.
 	if (board[0][c] != 'E') {
-		std::cout << "Column full.\n";
+		// std::cout << "Column full.\n";
 		return EXIT_FAILURE;
 	}
 
@@ -78,6 +78,8 @@ int Environment::place_piece(char p, int c) {
 // I.E. Has 4 pieces in a row, either vertically, horizontally, or diagonally.
 int Environment::has_won(char color) {
 
+	int sum = 0;
+
 	// Checks horizontal
 	for (int r = 0; r < rows; ++r) {
 		for (int c = 3; c < cols; ++c) {
@@ -86,7 +88,13 @@ int Environment::has_won(char color) {
 			char c3 = board[r][c - 1];
 			char c4 = board[r][c];
 			if (c1 == c2 && c2 == c3 && c3 == c4 && c4 == color)
-				return EXIT_SUCCESS;
+				return 1;
+			else {
+				if (c1 == c2 && c2 == color)
+					sum += 2;
+				if (c2 == c3 && c2 == color)
+					sum = sum + 4;
+			}
 		}
 	}
 
@@ -98,7 +106,13 @@ int Environment::has_won(char color) {
 			char r3 = board[r - 1][c];
 			char r4 = board[r][c];
 			if (r1 == r2 && r2 == r3 && r3 == r4 && r4 == color)
-				return EXIT_SUCCESS;
+				return 1;
+			else {
+				if (r1 == r2 && r2 == color)
+					sum += 2;
+				if (r2 == r3 && r2 == color)
+					sum = sum + 4;
+			}
 		}
 	}
 
@@ -110,7 +124,13 @@ int Environment::has_won(char color) {
 			char r3 = board[r - 1][c - 2];
 			char r4 = board[r][c - 3];
 			if (r1 == r2 && r2 == r3 && r3 == r4 && r4 == color)
-				return EXIT_SUCCESS;
+				return 1;
+			else {
+				if (r1 == r2 && r2 == color)
+					sum += 2;
+				if (r2 == r3 && r2 == color)
+					sum = sum + 4;
+			}
 		}
 	}
 
@@ -122,11 +142,17 @@ int Environment::has_won(char color) {
 			char r3 = board[r - 1][c + 2];
 			char r4 = board[r][c + 3];
 			if (r1 == r2 && r2 == r3 && r3 == r4 && r4 == color)
-				return EXIT_SUCCESS;
+				return 1;
+			else {
+				if (r1 == r2 && r2 == color)
+					sum += 2;
+				if (r2 == r3 && r2 == color)
+					sum = sum + 4;
+			}
 		}
 	}
 
-	return EXIT_FAILURE;
+	return sum;
 }
 
 // Tests has_won() method.
@@ -140,7 +166,7 @@ int test_wins() {
 	env.place_piece('R', 0);
 	env.place_piece('R', 0);
 	env.place_piece('R', 0);
-	if (env.has_won('R') == EXIT_SUCCESS)
+	if (env.has_won('R') == 1)
 		std::cout << "Verticle win successful...\n";
 	else {
 		std::cout << "Verticle win FAILURE.\n";
@@ -153,7 +179,7 @@ int test_wins() {
 	env.place_piece('R', 1);
 	env.place_piece('R', 2);
 	env.place_piece('R', 3);
-	if (env.has_won('R') == EXIT_SUCCESS)
+	if (env.has_won('R') == 1)
 		std::cout << "Horizontal win successful...\n";
 	else {
 		std::cout << "Horizontal win FAILURE.\n";
@@ -172,7 +198,7 @@ int test_wins() {
 	env.place_piece('B', 3);
 	env.place_piece('B', 3);
 	env.place_piece('R', 3);
-	if (env.has_won('R') == EXIT_SUCCESS)
+	if (env.has_won('R') == 1)
 		std::cout << "Pos diagonal win successful...\n";
 	else {
 		std::cout << "Pos diagonal win FAILURE.\n";
@@ -190,7 +216,7 @@ int test_wins() {
 	env.place_piece('B', 0);
 	env.place_piece('B', 0);
 	env.place_piece('R', 0);
-	if (env.has_won('R') == EXIT_SUCCESS)
+	if (env.has_won('R') == 1)
 		std::cout << "Neg diagonal win successful...\n";
 	else {
 		std::cout << "Neg diagonal win FAILURE.\n";
@@ -198,5 +224,5 @@ int test_wins() {
 	}
 
 	std::cout << "All tests successful.\n";
-	return EXIT_SUCCESS;
+	return 1;
 }

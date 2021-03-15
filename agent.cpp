@@ -25,45 +25,97 @@ Miniagent::~Miniagent() {
 	// placeholder
 }
 
-int Miniagent::minimax(Environment node, int depth, bool maxPlayer, int alpha, int beta, char c) {
-	if (depth == (node.rows * node.cols) || node.has_won(c))
+bool Miniagent::check_win(Environment env) {
+	if (env.has_won(color) == 1) {
+		return true;
+	}
+	return false;
+}
+
+int Miniagent::minimax(Environment &node, int depth, bool maxPlayer, int alpha, int beta, char c) {
+	char oppColor = ' ';
+	if (c == 'R')
+		oppColor = 'B';
+	else if (c == 'B')
+		oppColor = 'R';
+	else {
+		std::cout << "Invalid player piece.\n";
+		exit(EXIT_FAILURE);
+	}
+
+	if (depth == DEPTH || node.has_won(c) == 1|| node.is_full())
 		return evalution_function(node, c);
 
 	std::vector<Environment> list_of_moves = available_moves(node, c);
+
+	int move_index = 0;
 
 	if (maxPlayer)
 	{
 		int bestVal = MIN;
 		for (int i = 0; i < list_of_moves.size(); ++i) {
-			int value = minimax(list_of_moves[i], depth + 1, false, alpha, beta, c);
+			int value = minimax(list_of_moves[i], depth + 1, false, alpha, beta, oppColor);
 			bestVal = bestVal > value ? bestVal : value;
+			move_index = bestVal > value ? move_index : i;
 			alpha = alpha > bestVal ? alpha : bestVal;
 			if (beta <= alpha)
 				break;
 		}
+		node = list_of_moves[move_index];
 		return bestVal;
 	}
 	else {
 		int bestVal = MAX;
 		for (int i = 0; i < list_of_moves.size(); ++i) {
-			int value = minimax(list_of_moves[i], depth + 1, true, alpha, beta, c);
+			int value = minimax(list_of_moves[i], depth + 1, true, alpha, beta, oppColor);
 			bestVal = bestVal < value ? bestVal : value;
+			move_index = bestVal < value ? move_index : i;
 			beta = beta < bestVal ? beta : bestVal;
 			if (beta <= alpha)
 				break;
 		}
+		node = list_of_moves[move_index];
 		return bestVal;
 	}
 }
 
-int Miniagent::action(Environment env) {
-	return 0;
+int Miniagent::action(Environment &env) {
+	int value = 0;
+	int move_index = 0;
+	std::vector<Environment> list_of_moves = available_moves(env, color);
+
+	for (int i = 0; i < list_of_moves.size(); ++i) {
+		int temp_value = minimax(list_of_moves[i], 0, true, 0, 0, color);
+		move_index = temp_value > value ? i : move_index;
+		value = temp_value > value ? temp_value : value;
+	}
+
+	env = list_of_moves[move_index];
+
+	return EXIT_SUCCESS;
 }
 
 int evalution_function(Environment env, char color) {
-	if (env.has_won(color))
+	char oppColor = ' ';
+	if (color == 'R')
+		oppColor = 'B';
+	else if (color == 'B')
+		oppColor = 'R';
+	else {
+		std::cout << "Invalid player piece.\n";
+		exit(EXIT_FAILURE);
+	}
+
+	int score = env.has_won(color);
+	int opScore = env.has_won(oppColor);
+
+	if (score == EXIT_SUCCESS)
 		return MAX; // +10000
-	return 0;
+	if (opScore == EXIT_SUCCESS)
+		return MIN; // -10000
+
+	// returns total score accounting for all pieces on board. Returns negative score if opponent has 'higher' score.
+	return score > opScore ? score : -opScore;
 }
 
 // Returns a vector (list) of available moves at the current position

@@ -2,7 +2,9 @@
 #ifndef AGENT_H
 #define AGENT_H
 #include "environment.h"
+#include <iostream>
 
+const int DEPTH = 5; // Minimax hyperparameter
 
 class Agent 
 {
@@ -18,8 +20,9 @@ class Miniagent : public Agent {
 public:
 	Miniagent(char c);
 	~Miniagent();
-	int action(Environment env);
-	int minimax(Environment node, int depth, bool maxPlayer, int alpha, int beta, char c);
+	int action(Environment &env);
+	int minimax(Environment &node, int depth, bool maxPlayer, int alpha, int beta, char c);
+	bool check_win(Environment env);
 private:
 };
 
