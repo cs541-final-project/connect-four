@@ -5,8 +5,17 @@ Environment::Environment() {
 	// Initializes board of row x column dimensions to "E" indicating all states are "empty."
 	rows = MAX_ROWS;
 	cols = MAX_COLS;
+	open_locations = rows * cols;
 	std::vector<std::vector<char>> temp_board(rows, std::vector<char>(cols, 'E'));
 	board = temp_board;
+}
+
+Environment::Environment(const Environment& src) {
+	// Copies src
+	rows = src.rows;
+	cols = src.cols;
+	open_locations = rows * cols;
+	board = src.board;
 }
 
 Environment::~Environment() {
@@ -22,6 +31,20 @@ int Environment::print_board() {
 		std::cout << std::endl;
 	}
 	return EXIT_SUCCESS;
+}
+
+// Returns true if no pieces have been played
+int Environment::is_empty() {
+	if (num_of_pieces < 1)
+		return 1;
+	return 0;
+}
+
+// Returns true if no remaining locations in board
+int Environment::is_full() {
+	if (open_locations < 1)
+		return 1;
+	return 0;
 }
 
 // Updates board state with new piece.
@@ -44,6 +67,9 @@ int Environment::place_piece(char p, int c) {
 		r--;
 
 	board[r][c] = p;
+
+	num_of_pieces++;
+	open_locations--;
 
 	return EXIT_SUCCESS;
 }
