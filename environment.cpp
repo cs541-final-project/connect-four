@@ -5,8 +5,17 @@ Environment::Environment() {
 	// Initializes board of row x column dimensions to "E" indicating all states are "empty."
 	rows = MAX_ROWS;
 	cols = MAX_COLS;
+	open_locations = rows * cols;
 	std::vector<std::vector<char>> temp_board(rows, std::vector<char>(cols, 'E'));
 	board = temp_board;
+}
+
+Environment::Environment(const Environment& src) {
+	// Copies src
+	rows = src.rows;
+	cols = src.cols;
+	open_locations = rows * cols;
+	board = src.board;
 }
 
 Environment::~Environment() {
@@ -24,6 +33,20 @@ int Environment::print_board() {
 	return EXIT_SUCCESS;
 }
 
+// Returns true if no pieces have been played
+int Environment::is_empty() {
+	if (num_of_pieces < 1)
+		return 1;
+	return 0;
+}
+
+// Returns true if no remaining locations in board
+int Environment::is_full() {
+	if (open_locations < 1)
+		return 1;
+	return 0;
+}
+
 // Updates board state with new piece.
 // p indicates "color" of piece, c indicates column of placement.
 // TODO: Implement penalty upon returning EXIT_FAILURE;
@@ -35,7 +58,7 @@ int Environment::place_piece(char p, int c) {
 
 	// Checks if the column is full.
 	if (board[0][c] != 'E') {
-		std::cout << "Column full.\n";
+		// std::cout << "Column full.\n";
 		return EXIT_FAILURE;
 	}
 
@@ -45,12 +68,17 @@ int Environment::place_piece(char p, int c) {
 
 	board[r][c] = p;
 
+	num_of_pieces++;
+	open_locations--;
+
 	return EXIT_SUCCESS;
 }
 
 // Checks rows of the environment to determine if a color won
 // I.E. Has 4 pieces in a row, either vertically, horizontally, or diagonally.
 int Environment::has_won(char color) {
+
+	int sum = 0;
 
 	// Checks horizontal
 	for (int r = 0; r < rows; ++r) {
@@ -60,7 +88,13 @@ int Environment::has_won(char color) {
 			char c3 = board[r][c - 1];
 			char c4 = board[r][c];
 			if (c1 == c2 && c2 == c3 && c3 == c4 && c4 == color)
-				return EXIT_SUCCESS;
+				return 1;
+			else {
+				if (c1 == c2 && c2 == color)
+					sum += 2;
+				if (c2 == c3 && c2 == color)
+					sum = sum + 4;
+			}
 		}
 	}
 
@@ -72,7 +106,13 @@ int Environment::has_won(char color) {
 			char r3 = board[r - 1][c];
 			char r4 = board[r][c];
 			if (r1 == r2 && r2 == r3 && r3 == r4 && r4 == color)
-				return EXIT_SUCCESS;
+				return 1;
+			else {
+				if (r1 == r2 && r2 == color)
+					sum += 2;
+				if (r2 == r3 && r2 == color)
+					sum = sum + 4;
+			}
 		}
 	}
 
@@ -84,7 +124,13 @@ int Environment::has_won(char color) {
 			char r3 = board[r - 1][c - 2];
 			char r4 = board[r][c - 3];
 			if (r1 == r2 && r2 == r3 && r3 == r4 && r4 == color)
-				return EXIT_SUCCESS;
+				return 1;
+			else {
+				if (r1 == r2 && r2 == color)
+					sum += 2;
+				if (r2 == r3 && r2 == color)
+					sum = sum + 4;
+			}
 		}
 	}
 
@@ -96,11 +142,17 @@ int Environment::has_won(char color) {
 			char r3 = board[r - 1][c + 2];
 			char r4 = board[r][c + 3];
 			if (r1 == r2 && r2 == r3 && r3 == r4 && r4 == color)
-				return EXIT_SUCCESS;
+				return 1;
+			else {
+				if (r1 == r2 && r2 == color)
+					sum += 2;
+				if (r2 == r3 && r2 == color)
+					sum = sum + 4;
+			}
 		}
 	}
 
-	return EXIT_FAILURE;
+	return sum;
 }
 
 // Tests has_won() method.
@@ -114,7 +166,7 @@ int test_wins() {
 	env.place_piece('R', 0);
 	env.place_piece('R', 0);
 	env.place_piece('R', 0);
-	if (env.has_won('R') == EXIT_SUCCESS)
+	if (env.has_won('R') == 1)
 		std::cout << "Verticle win successful...\n";
 	else {
 		std::cout << "Verticle win FAILURE.\n";
@@ -127,7 +179,7 @@ int test_wins() {
 	env.place_piece('R', 1);
 	env.place_piece('R', 2);
 	env.place_piece('R', 3);
-	if (env.has_won('R') == EXIT_SUCCESS)
+	if (env.has_won('R') == 1)
 		std::cout << "Horizontal win successful...\n";
 	else {
 		std::cout << "Horizontal win FAILURE.\n";
@@ -146,7 +198,7 @@ int test_wins() {
 	env.place_piece('B', 3);
 	env.place_piece('B', 3);
 	env.place_piece('R', 3);
-	if (env.has_won('R') == EXIT_SUCCESS)
+	if (env.has_won('R') == 1)
 		std::cout << "Pos diagonal win successful...\n";
 	else {
 		std::cout << "Pos diagonal win FAILURE.\n";
@@ -164,7 +216,7 @@ int test_wins() {
 	env.place_piece('B', 0);
 	env.place_piece('B', 0);
 	env.place_piece('R', 0);
-	if (env.has_won('R') == EXIT_SUCCESS)
+	if (env.has_won('R') == 1)
 		std::cout << "Neg diagonal win successful...\n";
 	else {
 		std::cout << "Neg diagonal win FAILURE.\n";
@@ -172,5 +224,5 @@ int test_wins() {
 	}
 
 	std::cout << "All tests successful.\n";
-	return EXIT_SUCCESS;
+	return 1;
 }
