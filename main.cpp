@@ -12,6 +12,7 @@ int main() {
 	srand(time(NULL));
 	Environment env = Environment();
 	Miniagent agent = Miniagent('R');
+	cout << "Initial Board\n";
 	env.print_board();
 	cout << "\n=============\n\n";
 	
@@ -38,6 +39,7 @@ int main() {
 
 	cout << "\n\n";
 	cout << "\nMinimax vs. Minimax\n";
+	cout << "\nInitial Board\n";
 	env2.print_board();
 	cout << "\n=============\n\n";
 
