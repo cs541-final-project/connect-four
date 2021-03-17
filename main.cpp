@@ -12,7 +12,7 @@ int main() {
 	srand(time(NULL));
 	Environment env = Environment();
 	Miniagent agent = Miniagent('R');
-	Miniagent oppAgent = Miniagent('B');
+	cout << "Initial Board\n";
 	env.print_board();
 	cout << "\n=============\n\n";
 	
@@ -33,18 +33,27 @@ int main() {
 
 	env.print_board();
 
+	Environment env2 = Environment();
+	Miniagent agent2 = Miniagent('R');
+	Miniagent oppAgent = Miniagent('B');
+
+	cout << "\n\n";
 	cout << "\nMinimax vs. Minimax\n";
+	cout << "\nInitial Board\n";
+	env2.print_board();
+	cout << "\n=============\n\n";
+
 	// Minimax agent versus other Minimax agent.
-	while (!agent.check_win(env) && !oppAgent.check_win(env)) {
-		agent.minimax(env, 0, true, MIN, MAX, 'R');
-		oppAgent.minimax(env, 0, false, MIN, MAX, 'B');
+	while (!agent2.check_win(env2) && !oppAgent.check_win(env2)) {
+		agent2.minimax(env2, 0, true, MIN, MAX, 'R');
+		oppAgent.minimax(env2, 0, false, MIN, MAX, 'B');
 	}
 
-	if (agent.check_win(env))
+	if (agent2.check_win(env2))
 		cout << "\nRED WINS!\n\n";
-	else if (env.has_won('B') == 1)
+	else if (env2.has_won('B') == 1)
 		cout << "\nBLACK WINS!\n\n";
-	env.print_board();
+	env2.print_board();
 
 	cout << "Press Enter To Exit...";
 	cin.get();
