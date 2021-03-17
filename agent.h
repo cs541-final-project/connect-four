@@ -3,6 +3,7 @@
 #define AGENT_H
 #include "environment.h"
 #include <iostream>
+using namespace std;
 
 const int DEPTH = 5; // Minimax hyperparameter
 
@@ -13,7 +14,7 @@ public:
 	~Agent();
 	virtual int action(Environment env);
 protected:
-	char color;  // Either 'R' for red, or 'B' for black
+	char color;  // Either 'R' for red, or 'Y' for yellow
 };
 
 class Miniagent : public Agent {
@@ -27,5 +28,5 @@ private:
 };
 
 int evalution_function(Environment env, char color);
-std::vector<Environment> available_moves(Environment env, char color);
+vector<Environment> available_moves(Environment env, char color);
 #endif // !AGENT_H

@@ -12,30 +12,32 @@ int main() {
 	srand(time(NULL));
 	Environment env = Environment();
 	Miniagent agent = Miniagent('R');
-	cout << "Initial Board\n";
+	cout << "\nInitial Board\n";
 	env.print_board();
 	cout << "\n=============\n\n";
 	
 	cout << "Minimax vs. Random\n";
 	// Minimax agent versus random agent.
-	while (!agent.check_win(env) && env.has_won('B') != 1) {
+	while (!agent.check_win(env) && env.has_won('Y') != 1) {
 		agent.minimax(env, 0, true, MIN, MAX, 'R');
 		int index = rand() % 7;
-		while (env.place_piece('B', index) == EXIT_FAILURE) {
+		while (env.place_piece('Y', index) == EXIT_FAILURE) {
 			index = rand() % 7;
 		}
 	}
 
 	if (agent.check_win(env))
 		cout << "\nRED WINS!\n\n";
-	else if (env.has_won('B') == 1)
-		cout << "\nBLACK WINS!\n\n";
+	else if (env.has_won('Y') == 1)
+		cout << "\nYELLOW WINS!\n\n";
+	else
+		cout << "\nTIE GAME\n\n";
 
 	env.print_board();
 
 	Environment env2 = Environment();
 	Miniagent agent2 = Miniagent('R');
-	Miniagent oppAgent = Miniagent('B');
+	Miniagent oppAgent = Miniagent('Y');
 
 	cout << "\n\n";
 	cout << "\nMinimax vs. Minimax\n";
@@ -46,16 +48,18 @@ int main() {
 	// Minimax agent versus other Minimax agent.
 	while (!agent2.check_win(env2) && !oppAgent.check_win(env2)) {
 		agent2.minimax(env2, 0, true, MIN, MAX, 'R');
-		oppAgent.minimax(env2, 0, false, MIN, MAX, 'B');
+		oppAgent.minimax(env2, 0, false, MIN, MAX, 'Y');
 	}
 
 	if (agent2.check_win(env2))
 		cout << "\nRED WINS!\n\n";
-	else if (env2.has_won('B') == 1)
-		cout << "\nBLACK WINS!\n\n";
+	else if (env2.has_won('Y') == 1)
+		cout << "\nYELLOW WINS!\n\n";
+	else
+		cout << "\nTIE GAME\n\n";
 	env2.print_board();
 
-	cout << "Press Enter To Exit...";
+	cout << "\nPress Enter To Exit...";
 	cin.get();
 
 	return 0;

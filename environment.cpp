@@ -1,12 +1,13 @@
 #include <iostream>
 #include "environment.h"
+using namespace std;
 
 Environment::Environment() {
-	// Initializes board of row x column dimensions to "E" indicating all states are "empty."
+	// Initializes board of row x column dimensions to "~" indicating all states are empty.
 	rows = MAX_ROWS;
 	cols = MAX_COLS;
 	open_locations = rows * cols;
-	std::vector<std::vector<char>> temp_board(rows, std::vector<char>(cols, 'E'));
+	vector<vector<char>> temp_board(rows, vector<char>(cols, '~'));
 	board = temp_board;
 }
 
@@ -19,16 +20,17 @@ Environment::Environment(const Environment& src) {
 }
 
 Environment::~Environment() {
-	// placeholder
+	board.clear();
+	//deconstructer
 }
 
 // Prints current state of environment to console
 int Environment::print_board() {
 	for (int r = 0; r < rows; ++r) {
 		for (int c = 0; c < cols; ++c) {
-			std::cout << board[r][c] << " ";
+			cout << board[r][c] << " ";
 		}
-		std::cout << std::endl;
+		cout << endl;
 	}
 	return EXIT_SUCCESS;
 }
@@ -51,19 +53,19 @@ int Environment::is_full() {
 // p indicates "color" of piece, c indicates column of placement.
 // TODO: Implement penalty upon returning EXIT_FAILURE;
 int Environment::place_piece(char p, int c) {
-	if (toupper(p) != 'R' && toupper(p) != 'B') {
-		std::cout << "Invalid placement. Piece does not exist.\n";
+	if (toupper(p) != 'R' && toupper(p) != 'Y') {
+		cout << "Invalid placement. Piece does not exist.\n";
 		exit(EXIT_FAILURE);
 	}
 
 	// Checks if the column is full.
-	if (board[0][c] != 'E') {
+	if (board[0][c] != '~') {
 		// std::cout << "Column full.\n";
 		return EXIT_FAILURE;
 	}
 
 	int r = rows - 1;
-	while (board[r][c] != 'E' && r > 0)
+	while (board[r][c] != '~' && r > 0)
 		r--;
 
 	board[r][c] = p;
@@ -159,7 +161,7 @@ int Environment::has_won(char color) {
 int test_wins() {
 	Environment env = Environment();
 
-	std::cout << "Testing environment win method.\n\n";
+	cout << "Testing environment win method.\n\n";
 
 	// verticle win test
 	env.place_piece('R', 0);
@@ -167,9 +169,9 @@ int test_wins() {
 	env.place_piece('R', 0);
 	env.place_piece('R', 0);
 	if (env.has_won('R') == 1)
-		std::cout << "Verticle win successful...\n";
+		cout << "Verticle win successful...\n";
 	else {
-		std::cout << "Verticle win FAILURE.\n";
+		cout << "Verticle win FAILURE.\n";
 		return EXIT_FAILURE;
 	}
 
@@ -180,49 +182,49 @@ int test_wins() {
 	env.place_piece('R', 2);
 	env.place_piece('R', 3);
 	if (env.has_won('R') == 1)
-		std::cout << "Horizontal win successful...\n";
+		cout << "Horizontal win successful...\n";
 	else {
-		std::cout << "Horizontal win FAILURE.\n";
+		cout << "Horizontal win FAILURE.\n";
 		return EXIT_FAILURE;
 	}
 
 	env = Environment();
 	// Diagonal (positive) win test
 	env.place_piece('R', 0);
-	env.place_piece('B', 1);
+	env.place_piece('Y', 1);
 	env.place_piece('R', 1);
-	env.place_piece('B', 2);
-	env.place_piece('B', 2);
+	env.place_piece('Y', 2);
+	env.place_piece('Y', 2);
 	env.place_piece('R', 2);
-	env.place_piece('B', 3);
-	env.place_piece('B', 3);
-	env.place_piece('B', 3);
+	env.place_piece('Y', 3);
+	env.place_piece('Y', 3);
+	env.place_piece('Y', 3);
 	env.place_piece('R', 3);
 	if (env.has_won('R') == 1)
-		std::cout << "Pos diagonal win successful...\n";
+		cout << "Pos diagonal win successful...\n";
 	else {
-		std::cout << "Pos diagonal win FAILURE.\n";
+		cout << "Pos diagonal win FAILURE.\n";
 		return EXIT_FAILURE;
 	}
 
 	// Diagonal (positive) win test
 	env.place_piece('R', 3);
-	env.place_piece('B', 2);
+	env.place_piece('Y', 2);
 	env.place_piece('R', 2);
-	env.place_piece('B', 1);
-	env.place_piece('B', 1);
+	env.place_piece('Y', 1);
+	env.place_piece('Y', 1);
 	env.place_piece('R', 1);
-	env.place_piece('B', 0);
-	env.place_piece('B', 0);
-	env.place_piece('B', 0);
+	env.place_piece('Y', 0);
+	env.place_piece('Y', 0);
+	env.place_piece('Y', 0);
 	env.place_piece('R', 0);
 	if (env.has_won('R') == 1)
-		std::cout << "Neg diagonal win successful...\n";
+		cout << "Neg diagonal win successful...\n";
 	else {
-		std::cout << "Neg diagonal win FAILURE.\n";
+		cout << "Neg diagonal win FAILURE.\n";
 		return EXIT_FAILURE;
 	}
 
-	std::cout << "All tests successful.\n";
+	cout << "All tests successful.\n";
 	return 1;
 }
