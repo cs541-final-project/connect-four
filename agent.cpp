@@ -8,7 +8,7 @@ Agent::Agent(char c) {
 }
 
 Agent::~Agent() {
-	// placeholder
+	//deconstructer
 }
 
 int Agent::action(Environment env) {
@@ -35,8 +35,8 @@ bool Miniagent::check_win(Environment env) {
 int Miniagent::minimax(Environment &node, int depth, bool maxPlayer, int alpha, int beta, char c) {
 	char oppColor = ' ';
 	if (c == 'R')
-		oppColor = 'B';
-	else if (c == 'B')
+		oppColor = 'Y';
+	else if (c == 'Y')
 		oppColor = 'R';
 	else {
 		std::cout << "Invalid player piece.\n";
@@ -46,14 +46,14 @@ int Miniagent::minimax(Environment &node, int depth, bool maxPlayer, int alpha, 
 	if (depth == DEPTH || node.has_won(c) == 1|| node.is_full())
 		return evalution_function(node, c);
 
-	std::vector<Environment> list_of_moves = available_moves(node, c);
+	vector<Environment> list_of_moves = available_moves(node, c);
 
 	int move_index = 0;
 
 	if (maxPlayer)
 	{
 		int bestVal = MIN;
-		for (int i = 0; i < list_of_moves.size(); ++i) {
+		for (unsigned long int i = 0; i < list_of_moves.size(); ++i) {
 			int value = minimax(list_of_moves[i], depth + 1, false, alpha, beta, oppColor);
 			bestVal = bestVal > value ? bestVal : value;
 			move_index = bestVal > value ? move_index : i;
@@ -66,7 +66,7 @@ int Miniagent::minimax(Environment &node, int depth, bool maxPlayer, int alpha, 
 	}
 	else {
 		int bestVal = MAX;
-		for (int i = 0; i < list_of_moves.size(); ++i) {
+		for (unsigned long int i = 0; i < list_of_moves.size(); ++i) {
 			int value = minimax(list_of_moves[i], depth + 1, true, alpha, beta, oppColor);
 			bestVal = bestVal < value ? bestVal : value;
 			move_index = bestVal < value ? move_index : i;
@@ -82,9 +82,9 @@ int Miniagent::minimax(Environment &node, int depth, bool maxPlayer, int alpha, 
 int Miniagent::action(Environment &env) {
 	int value = 0;
 	int move_index = 0;
-	std::vector<Environment> list_of_moves = available_moves(env, color);
+	vector<Environment> list_of_moves = available_moves(env, color);
 
-	for (int i = 0; i < list_of_moves.size(); ++i) {
+	for (unsigned long int i = 0; i < list_of_moves.size(); ++i) {
 		int temp_value = minimax(list_of_moves[i], 0, true, 0, 0, color);
 		move_index = temp_value > value ? i : move_index;
 		value = temp_value > value ? temp_value : value;
@@ -98,8 +98,8 @@ int Miniagent::action(Environment &env) {
 int evalution_function(Environment env, char color) {
 	char oppColor = ' ';
 	if (color == 'R')
-		oppColor = 'B';
-	else if (color == 'B')
+		oppColor = 'Y';
+	else if (color == 'Y')
 		oppColor = 'R';
 	else {
 		std::cout << "Invalid player piece.\n";
@@ -119,8 +119,8 @@ int evalution_function(Environment env, char color) {
 }
 
 // Returns a vector (list) of available moves at the current position
-std::vector<Environment> available_moves(Environment env, char color) {
-	std::vector<Environment> moves;
+vector<Environment> available_moves(Environment env, char color) {
+	vector<Environment> moves;
 
 	for (int c = 0; c < env.cols; ++c) {
 		for (int r = 0; r < env.rows; ++r) {

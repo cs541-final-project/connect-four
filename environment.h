@@ -5,7 +5,7 @@
 #define MAX_COLS 7
 
 #include <vector>
-
+using namespace std;
 
 class Environment
 {
@@ -21,7 +21,7 @@ public:
 
 	int rows = 0;
 	int cols = 0;
-	std::vector<std::vector<char>> board;
+	vector<vector<char>> board;
 private:
 	int num_of_pieces = 0;  // Keeps track of the number of 'pieces' in play
 	int open_locations = 0;
